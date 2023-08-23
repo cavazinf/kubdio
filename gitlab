@@ -1,0 +1,24 @@
+yaml
+Copy code
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  script:
+    - kubectl config set-cluster meu-cluster --server=https://meu-cluster-endpoint --insecure-skip-tls-verify=true
+    - kubectl config set-credentials gitlab --token=$KUBE_TOKEN
+    - kubectl config set-context gitlab --cluster=meu-cluster --user=gitlab
+    - kubectl config use-context gitlab
+    - kubectl apply -f deployment.yaml
+Neste exemplo:
+
+Estamos usando duas etapas: uma etapa de implantação (deploy) e a etapa stages que a define.
+
+Na etapa de implantação, primeiro configuramos o cluster Kubernetes para que o GitLab possa se conectar a ele. Substitua meu-cluster, https://meu-cluster-endpoint e $KUBE_TOKEN pelas informações corretas para seu cluster.
+
+Em seguida, aplicamos o arquivo deployment.yaml para implantar o aplicativo. Certifique-se de que deployment.yaml seja o nome correto do arquivo YAML que define sua implantação.
+
+Note que este é um exemplo simplificado. Em um ambiente de produção real, você deve configurar as credenciais com segurança e considerar as melhores práticas de segurança para acesso ao cluster Kubernetes.
+
+Além disso, esta configuração pressupõe que você já tenha configurado as variáveis de ambiente no GitLab para autenticar-se no cluster Kubernetes, conforme mencionado nas etapas anteriores.
